@@ -1,8 +1,6 @@
 name: Auto Update Changelog
 
 on:
-  push:
-    branches: [ main ]
   pull_request:
     types: [closed]
     branches: [ main ]
@@ -13,14 +11,9 @@ jobs:
     
     # Only run for releases (branches with format by_release*)
     if: |
-      (github.event_name == 'push' && 
-       contains(github.event.head_commit.message, 'Merge pull request') &&
-       (contains(github.event.head_commit.message, 'by_release') || 
-        contains(github.event.head_commit.message, 'by_release_v'))) ||
-      (github.event_name == 'pull_request' && 
-       github.event.pull_request.merged == true &&
-       (startsWith(github.event.pull_request.head.ref, 'by_release') ||
-        startsWith(github.event.pull_request.head.ref, 'by_release_v')))
+      github.event.pull_request.merged == true &&
+      (startsWith(github.event.pull_request.head.ref, 'by_release') ||
+       startsWith(github.event.pull_request.head.ref, 'by_release_v'))
     
     steps:
       - name: Checkout repository
